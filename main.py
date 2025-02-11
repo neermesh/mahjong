@@ -59,6 +59,9 @@ def analyze_questions(input_csv, output_xlsx):
     pass_color = PatternFill(start_color="C6EFCE", end_color="C6EFCE", fill_type="solid")  # Green
     fail_color = PatternFill(start_color="FFC7CE", end_color="FFC7CE", fill_type="solid")  # Red
 
+    # Identify column indexes
+    status_col_idx = df.columns.get_loc("status") + 1  # Convert to Excel column index
+
     # Apply row-wise section coloring
     for row_idx in range(2, ws.max_row + 1):  # Start from row 2 to skip headers
         question_number = row_idx - 1  # Adjusting for 1-based indexing
@@ -81,7 +84,7 @@ def analyze_questions(input_csv, output_xlsx):
                 ws.cell(row=row_idx, column=col_idx).fill = section_fill
         
         # Apply Pass/Fail color
-        status_cell = ws.cell(row=row_idx, column=df.columns.get_loc("status") + 1)
+        status_cell = ws.cell(row=row_idx, column=status_col_idx)
         if "Fail" in status_cell.value:
             status_cell.fill = fail_color
         elif "Pass" in status_cell.value:
